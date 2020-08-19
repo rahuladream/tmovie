@@ -14,7 +14,6 @@ from rest_framework_jwt.views import JSONWebTokenAPIView
 
 # Local imports
 from .models import *
-from .utils import generate_jwt_token
 
 
 # API Logic Here

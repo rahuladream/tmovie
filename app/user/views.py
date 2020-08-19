@@ -37,11 +37,11 @@ class RegistrationAPIView(APIView):
                     message += " "
                     message += error[0]
                 return Response({
-                    status: False,
+                    'status': False,
                     'message': message},
                     status=status.HTTP_400_BAD_REQUEST
                     )
         except Exception as e:
             return Response({'status': False,
                              'message': str(e)},
-                            status=status.HTTP_400_BAD_REQUEST)
+                                status=status.HTTP_400_BAD_REQUEST)

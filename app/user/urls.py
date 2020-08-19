@@ -10,21 +10,18 @@ from django.conf.urls import url
 # Django rest_framework imports
 from rest_framework import permissions
 
-# Local Imports
-from .constants import *
+
+
 
 from .views import (
-                TestAppView
+                RegistrationAPIView
                 )
 
 
-
-
-app_name = 'movie'
+app_name = 'user'
 
 urlpatterns = [
-    url(r'^test/$', TestAppView.as_view(), name='test_app_api'),
 
-   
+    url(r'^register/$', RegistrationAPIView.as_view(), name='register-api'),
 
 ]
