@@ -14,9 +14,13 @@ from django.conf.urls import url
 from .views import (
                 TestAppView
                 )
+from .swagger import schema_view
 
 app_name = 'movie'
 
 urlpatterns = [
-    url(r'^test/$', TestAppView.as_view(), name='test_app_api')
+    url(r'^test/$', TestAppView.as_view(), name='test_app_api'),
+
+    url(r'^docs/$', schema_view, name="schema_view"),
+
 ]
