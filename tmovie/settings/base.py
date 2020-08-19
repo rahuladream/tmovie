@@ -6,6 +6,7 @@ from decouple import config
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+SITE_ID = 1
 
 def base_dir_join(*args):
     return os.path.join(BASE_DIR, *args)

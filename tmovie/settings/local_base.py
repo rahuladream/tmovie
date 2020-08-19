@@ -23,7 +23,7 @@ STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 AUTH_PASSWORD_VALIDATORS = []  # allow easy passwords only on local
 
 # INSTALLED_APPS
-INSTALLED_APPS += ("",)
+# INSTALLED_APPS += ("",)
 
 # Celery
 CELERY_TASK_ALWAYS_EAGER = True
