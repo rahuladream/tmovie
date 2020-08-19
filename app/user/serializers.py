@@ -15,7 +15,7 @@ from rest_framework import serializers
 # Third Party Library imports
 
 # local imports.
-from .models import CustomeUser
+from .models import CustomUser
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
@@ -31,11 +31,11 @@ class UserCreateSerializer(serializers.ModelSerializer):
         last_name = validated_data['last_name']
         role = validated_data['role']
         email = validated_data['email']
-        user = CustomeUser.objects.create(**validated_data)
+        user = CustomUser.objects.create(**validated_data)
         user.set_password(validated_data['password'])
         user.save()
         return user
     
     class Meta:
-        model = CustomeUser
+        model = CustomUser
         fields = ('email', 'id', 'username', 'password', 'first_name', 'last_name', 'role')

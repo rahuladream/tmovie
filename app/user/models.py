@@ -18,7 +18,7 @@ USER_ROLE = (('ADMIN', 'ADMIN'),
         ('USER', 'USER')
         )
 
-class CustomeUser(AbstractUser, TimestampModel):
+class CustomUser(AbstractUser, TimestampModel):
     first_name = models.CharField(('First Name'), max_length=30, blank=True)
     last_name = models.CharField(('Last Name'), max_length=30, blank=True)
     role = models.CharField(max_length=20, choices=USER_ROLE)

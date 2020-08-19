@@ -57,7 +57,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'tmovie.wsgi.application'
 
-AUTH_USER_MODEL = 'user.CustomeUser'
+AUTH_USER_MODEL = 'user.CustomUser'
 
 
 
