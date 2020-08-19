@@ -2,8 +2,7 @@
 
 ## Project Moto
 
-
-For a movie rating app, create a django rest api using django rest framework. The app needs to have the capability to 
+For a movie rating app, create a django rest api using ```django rest framework```. The app needs to have the capability to 
 list movies, 
 logged in users can save movies to a watchlist or mark them watched.  
 logged in users can view list of movies in their watchlist or watched list.
@@ -13,10 +12,10 @@ To populate the movies in your database, create a scraper to scrape IMDb’s top
 This scraper should ideally be triggered by an endpoint in your django api and accept any similar url e.g. https://www.imdb.com/india/top-rated-indian-movies.
 Already existing movies should be only updated. Not replaced/duplicated.
 
-*Few points to keep in mind-*
+#### Few points to keep in mind
 
-> use django-rest-framework
-> use pipenv/virtualenv etc to make the project easy to setup for anyone, add a setup file
-> use sqlite as database for portability
-> users should be able to sign up and login, use token authentication
-> take care of permissions - users cannot delete a movie, view other users’ watched list etc
+* use django-rest-framework
+* use pipenv/virtualenv etc to make the project easy to setup for anyone, add a setup file
+* use sqlite as database for portability
+* users should be able to sign up and login, use token authentication
+* take care of permissions - users cannot delete a movie, view other users’ watched list etc
