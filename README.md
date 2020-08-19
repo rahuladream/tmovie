@@ -13,7 +13,7 @@ To populate the movies in your database, create a scraper to scrape IMDb’s top
 This scraper should ideally be triggered by an endpoint in your django api and accept any similar url e.g. https://www.imdb.com/india/top-rated-indian-movies.
 Already existing movies should be only updated. Not replaced/duplicated.
 
-*Few points to keep in mind -*
+*Few points to keep in mind-*
 
 > use django-rest-framework
 > use pipenv/virtualenv etc to make the project easy to setup for anyone, add a setup file
