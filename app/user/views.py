@@ -3,6 +3,9 @@ import requests
 import os
 import datetime
 
+# Django imports
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
+
 # Django core imports
 from rest_framework import status
 from rest_framework.views import APIView
@@ -45,3 +48,36 @@ class RegistrationAPIView(APIView):
             return Response({'status': False,
                              'message': str(e)},
                                 status=status.HTTP_400_BAD_REQUEST)
+
+
+class LoginAPIView(JSONWebTokenAPIView):
+    serializer_class = JSONWebTokenSerializer
+
+    __doc__ = "Login In API for user which returns token"
+
+    @staticmethod
+    def post(request):
+        try:
+            serializer = JSONWebTokenSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer_data = serializer.validate(request.data)
+
+                user = CustomUser.objects.get(email=request.data.get('email'))
+                return Response( {
+                    'status': True,
+                    'token': serializer_data['token']},
+                    status=status.HTTP_200_OK )
+            else:
+                message = ''
+                for error in serializer.errors.values():
+                    message += " "
+                    message += error[0]
+                return Response({
+                    'status': False,
+                    'message': message
+                }, status=status.HTTP_400_BAD_REQUEST)
+        except (AttributeError, ObjectDoesNotExist):
+            return Response({
+                'status': False,
+                'message': 'User does not exist'
+            }, status=status.HTTP_400_BAD_REQUEST)
