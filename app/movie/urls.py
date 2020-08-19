@@ -11,8 +11,12 @@ from django.conf.urls import url
 
 # Local Imports
 
+from .views import (
+                TestAppView
+                )
+
 app_name = 'movie'
 
 urlpatterns = [
-    # url(r'^test/$',)
+    url(r'^test/$', TestAppView.as_view(), name='test_app_api')
 ]
