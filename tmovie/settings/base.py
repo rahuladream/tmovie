@@ -23,7 +23,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     
-    'app.movie'
+    'app.movie',
+    'app.user'
 ]
 
 MIDDLEWARE = [
@@ -55,6 +56,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'tmovie.wsgi.application'
+
+AUTH_USER_MODEL = 'user.CustomeUser'
+
 
 
 # Database
