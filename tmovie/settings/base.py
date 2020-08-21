@@ -24,7 +24,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     
     'app.movie',
-    'app.user'
+    'app.authentication'
 ]
 
 MIDDLEWARE = [
@@ -57,7 +57,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'tmovie.wsgi.application'
 
-AUTH_USER_MODEL = 'user.CustomUser'
+AUTH_USER_MODEL = 'authentication.CustomUser'
 
 
 

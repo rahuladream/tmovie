@@ -43,7 +43,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^api/v1/tmovie/', include('app.movie.urls', namespace='movie_api')),
-    url(r'^api/v1/tmovie/user/', include('app.user.urls', namespace='user_api')),
+    url(r'^api/v1/tmovie/user/', include('app.authentication.urls', namespace='user_api')),
 
 
 

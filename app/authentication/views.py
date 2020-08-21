@@ -62,7 +62,7 @@ class LoginAPIView(JSONWebTokenAPIView):
             if serializer.is_valid():
                 serializer_data = serializer.validate(request.data)
 
-                user = CustomUser.objects.get(email=request.data.get('email'))
+                user = CustomUser.objects.get(username=request.data.get('username'))
                 return Response( {
                     'status': True,
                     'token': serializer_data['token']},
