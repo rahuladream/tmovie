@@ -53,6 +53,35 @@ class MovieScrapper(Thread):
                     except:
                         # We leave the detail that were missing in the page
                         continue
+                
+                # basically here we create or add the data into the database
 
             finally:
                 self.queue.task_done()
+
+
+def main():
+    ts = time()
+
+    url = 'https://www.imdb.com/india/top-rated-indian-movies'
+    response_back = requests.get(url)
+    scrap_html = BeautifulSoup(response_back.text, 'lxml')
+    list_found_tbody = scrap_html.find('tbody', {'class': 'lister-list'})
+    found_trs = list_found_tbody.findAll('tr')
+
+    queue = Queue
+
+    for x in range(10):
+        worker = MovieScrapper(queue)
+        # setting daemon to true will let the main thread exit
+        # even though the wokers are blocking
+        worker.daemon = True
+        worker.start()
+    
+    # Put the tasks into the queue as a tuple:
+    for found_tr in found_trs:
+        logging.info('Queueing {}'.format(tr.find('td',{'class':'titleColumn'}).text))
+        queue.put(found_tr)
+    
+    queue.join()
+    logging.info('Took %s', time() - ts)
