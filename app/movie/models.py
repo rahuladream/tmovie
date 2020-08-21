@@ -20,7 +20,7 @@ class Movie(models.Model):
     release_date    = models.IntegerField(_('Release Year'), choices=YEAR_CHOICES)
     star_cast       = models.CharField(_('Movie Start Cast'), max_length=255, null=True, blank=True)
     rating          = models.FloatField(_('Movie Rating') , null=True, blank=True)
-    votes           = models.IntegerField(_('Movie Votes'), null=True, blank=True)
+    votes           = models.CharField(_('Movie Votes'), max_length=20, null=True, blank=True)
     links           = models.CharField(_('Movie Detail Link'), max_length=100, blank=True, null=True)
     trailer         = models.CharField(_('Trailer Link'), max_length=200, null=True, blank=True)
     summary         = models.TextField(_('Movie Summary'), null=True, blank=True)
@@ -35,6 +35,8 @@ class Movie(models.Model):
     gross           = models.CharField(_('Movie Total Gross Amount'), max_length=50, null=True, blank=True)
     cumulative      = models.CharField(_('Movie Total Cumulative Amount'), max_length=50, null=True, blank=True)
     movie_dump      = models.TextField(_('Store more information here'), null=True, blank=True)
+    created_at       = models.DateTimeField(_('Create At'), auto_now_add=True)
+    updated_at      = models.DateTimeField(_('Update At'), auto_now=True)
 
     class Meta:
         verbose_name = _('movie')
@@ -49,4 +51,6 @@ class Movie(models.Model):
     def __unicode__(self):
         return f'Movie Title: {self.title}'
 
+    def last_updated(self):
+        return self.last_updated
 

@@ -44,6 +44,9 @@ class MovieScrapper(Thread):
                 fetch_detail_page_info  = BeautifulSoup(response_page.text, 'lxml')
                 movie_story_line        = fetch_detail_page_info.find('div', {'class': 'inline canwrap'}).text.split('\n')[2].strip()
                 more_info_block         = fetch_detail_page_info.findAll('div', {'class': 'txt-block'})
+                movie_votes             = fetch_detail_page_info.find('div', {'class': 'imdbRating'}).strong['title']
+                star_crew               = fetch_detail_page_info.findAll('div', {'class': 'credit_summary_item'})[2].text.split('\n')[2]
+                movie_trailer           = 'https://www.imdb.com/' + fetch_detail_page_info.find('div', {'class': 'slate'})('a')[0]['href']
 
                 # Decide to store the random information into dictionary
                 # fetch the information as required
@@ -58,31 +61,56 @@ class MovieScrapper(Thread):
                         continue
                 
                 # basically here we create or add the data into the database
-                Movie.objects.update_or_create(
-                    title = movie_title,
-                    movieId = movie_uniqueid,
-                    release_date = movie_year,
-                    star_cast = 'Unkown',
-                    rating = movie_rating,
-                    votes = 0,
-                    img_source = movie_img_src,
-                    links = movie_link,
-                    trailer = 'Unknown trailer',
-                    summary = movie_story_line,
-                    taglines = data_store_dict['Taglines'] if 'Taglines' in data_store_dict else 'No Tagline Found',
-                    certificate = data_store_dict['Certificate'] if 'Certificate' in data_store_dict else 'No Certificate Found',
-                    trivia = data_store_dict['Trivia'] if 'Trivia' in data_store_dict else 'No Trivia Found',
-                    goofs = data_store_dict['Goofs'] if 'Goofs' in data_store_dict else 'No Goofs Found',
-                    country = data_store_dict['Country'] if 'Country' in data_store_dict else 'No Country Origin Found',
-                    language = data_store_dict['Language'] if 'Language' in data_store_dict else 'No Language Found',
-                    budget = data_store_dict['Budget'] if 'Budget' in data_store_dict else 'No Budget Detail Found',
-                    gross = data_store_dict['Gross'] if 'Gross' in data_store_dict else 'No Gross Record Found',
-                    cumulative = data_store_dict['Cumulative'] if 'Cumulative' in data_store_dict else 'No Cumulative Record Found',
-                    movie_dump = data_store_dict
-                )
+                try:
+                    Movie.objects.get(movieId = movie_uniqueid)
+                    Movie.objects.filter(movieId=movie_uniqueid).update(
+                        title = movie_title,
+                        movieId = movie_uniqueid,
+                        release_date = movie_year,
+                        star_cast = star_crew,
+                        rating = movie_rating,
+                        votes = movie_votes,
+                        img_source = movie_img_src,
+                        links = movie_link,
+                        trailer = movie_trailer,
+                        summary = movie_story_line,
+                        taglines = data_store_dict['Taglines'] if 'Taglines' in data_store_dict else 'No Tagline Found',
+                        certificate = data_store_dict['Certificate'] if 'Certificate' in data_store_dict else 'No Certificate Found',
+                        trivia = data_store_dict['Trivia'] if 'Trivia' in data_store_dict else 'No Trivia Found',
+                        goofs = data_store_dict['Goofs'] if 'Goofs' in data_store_dict else 'No Goofs Found',
+                        country = data_store_dict['Country'] if 'Country' in data_store_dict else 'No Country Origin Found',
+                        language = data_store_dict['Language'] if 'Language' in data_store_dict else 'No Language Found',
+                        budget = data_store_dict['Budget'] if 'Budget' in data_store_dict else 'No Budget Detail Found',
+                        gross = data_store_dict['Gross'] if 'Gross' in data_store_dict else 'No Gross Record Found',
+                        cumulative = data_store_dict['Cumulative'] if 'Cumulative' in data_store_dict else 'No Cumulative Record Found',
+                        movie_dump = data_store_dict
+                    )
+
+                except Movie.DoesNotExist:
+                    Movie.objects.create(
+                        title = movie_title,
+                        movieId = movie_uniqueid,
+                        release_date = movie_year,
+                        star_cast = star_crew,
+                        rating = movie_rating,
+                        votes = movie_votes,
+                        img_source = movie_img_src,
+                        links = movie_link,
+                        trailer = movie_trailer,
+                        summary = movie_story_line,
+                        taglines = data_store_dict['Taglines'] if 'Taglines' in data_store_dict else 'No Tagline Found',
+                        certificate = data_store_dict['Certificate'] if 'Certificate' in data_store_dict else 'No Certificate Found',
+                        trivia = data_store_dict['Trivia'] if 'Trivia' in data_store_dict else 'No Trivia Found',
+                        goofs = data_store_dict['Goofs'] if 'Goofs' in data_store_dict else 'No Goofs Found',
+                        country = data_store_dict['Country'] if 'Country' in data_store_dict else 'No Country Origin Found',
+                        language = data_store_dict['Language'] if 'Language' in data_store_dict else 'No Language Found',
+                        budget = data_store_dict['Budget'] if 'Budget' in data_store_dict else 'No Budget Detail Found',
+                        gross = data_store_dict['Gross'] if 'Gross' in data_store_dict else 'No Gross Record Found',
+                        cumulative = data_store_dict['Cumulative'] if 'Cumulative' in data_store_dict else 'No Cumulative Record Found',
+                        movie_dump = data_store_dict
+                    )
             except Exception as e:
                 print(e)
-                break;
 
             finally:
                 self.queue.task_done()
@@ -107,7 +135,7 @@ def main():
         worker.start()
     
     # Put the tasks into the queue as a tuple:
-    for found_tr in found_trs[0:2]:
+    for found_tr in found_trs:
         logging.info('Queueing {}'.format(found_tr.find('td',{'class':'titleColumn'}).text))
         queue.put(found_tr)
     
