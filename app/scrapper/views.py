@@ -9,6 +9,8 @@ import requests
 import re
 from bs4 import BeautifulSoup
 
+# Django core module import
+from app.movie.models import Movie
 
 # Basic logging to get more detailed information
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -56,7 +58,31 @@ class MovieScrapper(Thread):
                         continue
                 
                 # basically here we create or add the data into the database
-                print(data_store_dict)
+                Movie.objects.update_or_create(
+                    title = movie_title,
+                    movieId = movie_uniqueid,
+                    release_date = movie_year,
+                    star_cast = 'Unkown',
+                    rating = movie_rating,
+                    votes = 0,
+                    img_source = movie_img_src,
+                    links = movie_link,
+                    trailer = 'Unknown trailer',
+                    summary = movie_story_line,
+                    taglines = data_store_dict['Taglines'] if 'Taglines' in data_store_dict else 'No Tagline Found',
+                    certificate = data_store_dict['Certificate'] if 'Certificate' in data_store_dict else 'No Certificate Found',
+                    trivia = data_store_dict['Trivia'] if 'Trivia' in data_store_dict else 'No Trivia Found',
+                    goofs = data_store_dict['Goofs'] if 'Goofs' in data_store_dict else 'No Goofs Found',
+                    country = data_store_dict['Country'] if 'Country' in data_store_dict else 'No Country Origin Found',
+                    language = data_store_dict['Language'] if 'Language' in data_store_dict else 'No Language Found',
+                    budget = data_store_dict['Budget'] if 'Budget' in data_store_dict else 'No Budget Detail Found',
+                    gross = data_store_dict['Gross'] if 'Gross' in data_store_dict else 'No Gross Record Found',
+                    cumulative = data_store_dict['Cumulative'] if 'Cumulative' in data_store_dict else 'No Cumulative Record Found',
+                    movie_dump = data_store_dict
+                )
+            except Exception as e:
+                print(e)
+                break;
 
             finally:
                 self.queue.task_done()
@@ -81,7 +107,7 @@ def main():
         worker.start()
     
     # Put the tasks into the queue as a tuple:
-    for found_tr in found_trs[0:1]:
+    for found_tr in found_trs[0:2]:
         logging.info('Queueing {}'.format(found_tr.find('td',{'class':'titleColumn'}).text))
         queue.put(found_tr)
     
