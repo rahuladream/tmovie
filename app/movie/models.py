@@ -7,7 +7,7 @@ import datetime
 from django.utils import timezone
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
+from app.authentication.models import CustomUser 
 
 YEAR_CHOICES = []
 for r in range(1700, (datetime.datetime.now().year + 1)):
@@ -35,7 +35,7 @@ class Movie(models.Model):
     gross           = models.CharField(_('Movie Total Gross Amount'), max_length=50, null=True, blank=True)
     cumulative      = models.CharField(_('Movie Total Cumulative Amount'), max_length=50, null=True, blank=True)
     movie_dump      = models.TextField(_('Store more information here'), null=True, blank=True)
-    created_at       = models.DateTimeField(_('Create At'), auto_now_add=True)
+    created_at      = models.DateTimeField(_('Create At'), auto_now_add=True)
     updated_at      = models.DateTimeField(_('Update At'), auto_now=True)
 
     class Meta:
@@ -52,5 +52,35 @@ class Movie(models.Model):
         return f'{self.title}'
 
     def last_updated(self):
-        return self.last_updated
+        return self.updated_at
+
+
+    def get_all(self):
+        return self.objects.all()
+
+
+WATCH_CHOICES = (
+    ('watch_list', 'Watch List'),
+    ('watched_list', 'Watched List')
+)
+
+class Watch(models.Model):
+    user            = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    movie           = models.OneToOneField(Movie, on_delete=models.CASCADE)
+    action          = models.CharField(max_length=20, choices=WATCH_CHOICES)
+
+    class Meta:
+        verbose_name        = _("watch/watched list")
+        verbose_name_plural = _("watch/watched lists")
+        unique_together     = (('user', 'movie'))
+    
+    def __str__(self):
+        return '{} "added" <{}> to {}'.format(self.user.username.title(), self.movie.title, self.action) 
+
+
+    def get_watch_list(self, cls, user):
+        return cls.object.filter(user=user, action='watch_list')
+    
+    def get_watched_list(self, user):
+        return self.object.filter(user=user, action='watched_list')
 
