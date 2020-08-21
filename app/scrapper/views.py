@@ -10,7 +10,13 @@ import re
 from bs4 import BeautifulSoup
 
 # Django core module import
+from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
+# Local Model import
 from app.movie.models import Movie
+
 
 # Basic logging to get more detailed information
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -141,3 +147,14 @@ def main():
     
     queue.join()
     logging.info('Took %s', time() - ts)
+
+
+class SyncData(APIView):
+
+    def get(self, req, *args, **kwargs):
+        try:
+            main()
+            return Response('We have queue the request, It will take hardly 2 min to update', status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response('We could not process the request', status=status.HTTP_400_BAD_REQUEST)
+    

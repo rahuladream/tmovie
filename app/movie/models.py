@@ -48,8 +48,8 @@ class Movie(models.Model):
         """
         return self.rating
     
-    def __unicode__(self):
-        return f'Movie Title: {self.title}'
+    def __str__(self):
+        return f'{self.title}'
 
     def last_updated(self):
         return self.last_updated
