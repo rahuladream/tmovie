@@ -15,7 +15,8 @@ from rest_framework import permissions
 
 from .views import (
                 RegistrationAPIView,
-                LoginAPIView
+                LoginAPIView,
+                LogoutView
                 )
 
 
@@ -25,6 +26,7 @@ urlpatterns = [
 
     url(r'^register/$', RegistrationAPIView.as_view(), name='register-api'),
     url(r'^login/$', LoginAPIView.as_view(), name='login-api'),
+    url(r'^logout/$', LoginAPIView.as_view(), name='logout-api'),
 
 
 ]

@@ -81,3 +81,23 @@ class LoginAPIView(JSONWebTokenAPIView):
                 'status': False,
                 'message': 'User does not exist'
             }, status=status.HTTP_400_BAD_REQUEST)
+
+
+class LogoutView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    @staticmethod
+    def post(request):
+        """
+        Logout API for User
+        """
+        try:
+            request.user.auth_token.delete()
+            return Response({
+                'status': True,
+                'message': 'Logout successful',
+            }, status=status.HTTP_200_OK)
+        except (AttributeError, ObjectDoesNotExist):
+            return Response({
+                'status': False,
+            }, status=status.HTTP_400_BAD_REQUEST)
