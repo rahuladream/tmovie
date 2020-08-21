@@ -37,3 +37,27 @@ class TestAppView(APIView):
                 'message': str(e)},
                 status = status.HTTP_400_BAD_REQUEST
             )
+
+
+# class ProjectAPIView(GenericAPIView):
+#     serializer_class = ProjectSerializer
+#     permission_classes = (IsAuthenticated,)
+
+#     def get(self, request):
+#         """
+#         List out all the movies
+#         """
+#         try:
+#             pass
+#         except Exception as e:
+#             pass
+    
+#     def post(self, request, format=None):
+#         """
+#         Create a movie database
+#         """
+#         try:
+#             pass
+#         except Exception as e:
+#             pass
+        

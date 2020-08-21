@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     
     'app.movie',
+    'app.scrapper',
     'app.authentication'
 ]
 
