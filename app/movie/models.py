@@ -25,9 +25,15 @@ class Movie(models.Model):
     trailer         = models.CharField(_('Trailer Link'), max_length=200)
     summary         = models.TextField(_('Movie Summary'))
     taglines        = models.TextField(_('Movie TagLines'), blank=True, null=True)
+    certificate     = models.CharField(_('Movie Certificate'), max_length=2, blank=True, null=True)
+    trivia          = models.CharField(_('Movie Trivia'), max_length=200, blank=True, null=True)
+    goofs           = models.CharField(_('Movie Goofs'), max_length=200, blank=True, null=True)
+    country         = models.CharField(_('Movie Country'), max_length=100, blank=True, null=True)
+    language        = models.CharField(_('Movie Language'), max_length=100, blank=True, null=True)
     budget          = models.CharField(_('Movie Total Budget'), max_length=50, blank=True, null=True)
     gross           = models.CharField(_('Movie Total Gross Amount'), max_length=50, null=True, blank=True)
     cumulative      = models.CharField(_('Movie Total Cumulative Amount'), max_length=50, null=True, blank=True)
+    movie_dump      = models.TextField(_('Store more information here'), null=True, blank=True)
 
     class Meta:
         verbose_name = _('movie')

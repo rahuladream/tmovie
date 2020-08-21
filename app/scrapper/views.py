@@ -16,21 +16,22 @@ logger = logging.getLogger(__name__)
 
 class MovieScrapper(Thread):
     def __init__(self, queue):
+        Thread.__init__(self)
         self.queue = queue
     
 
     def run(self):
         while True:
             # get the work done tha data and work done mutliply
-            tr = self.queue.get()
+            found_tr = self.queue.get()
             try:
-                movie_string           = tr.find('td',{'class':'titleColumn'}).text
+                movie_string           = found_tr.find('td',{'class':'titleColumn'}).text
                 movie_title            = movie_string.split('\n')[2].strip()
                 movie_year             = re.search('\((.*?)\)', movie_string.split('\n')[3].strip()).group(1)
-                movie_rating           = tr.find('td', {'class': 'ratingColumn imdbRating'}).text
-                movie_img_src          = tr.find_all('img')[0]['src']
-                movie_link             = tr.find_all('a')[0].get('href')
-                movie_uniqueid         = tr.find_all('a')[0].get('href').split('/')[2]
+                movie_rating           = found_tr.find('td', {'class': 'ratingColumn imdbRating'}).text
+                movie_img_src          = found_tr.find_all('img')[0]['src']
+                movie_link             = found_tr.find_all('a')[0].get('href')
+                movie_uniqueid         = found_tr.find_all('a')[0].get('href').split('/')[2]
 
                 # Fetching detail page info
                 # Basically transferring the route to individual page 
@@ -49,12 +50,13 @@ class MovieScrapper(Thread):
 
                 for i in range(0, more_info_block.__len__()):
                     try:
-                        txt_info[more_info_block[i].text.split('\n')[1].strip()] = more_info_block[i].text.split('\n')[2].strip()
+                        data_store_dict[more_info_block[i].text.split('\n')[1].strip()] = more_info_block[i].text.split('\n')[2].strip()
                     except:
                         # We leave the detail that were missing in the page
                         continue
                 
                 # basically here we create or add the data into the database
+                print(data_store_dict)
 
             finally:
                 self.queue.task_done()
@@ -69,9 +71,9 @@ def main():
     list_found_tbody = scrap_html.find('tbody', {'class': 'lister-list'})
     found_trs = list_found_tbody.findAll('tr')
 
-    queue = Queue
+    queue = Queue()
 
-    for x in range(10):
+    for x in range(8):
         worker = MovieScrapper(queue)
         # setting daemon to true will let the main thread exit
         # even though the wokers are blocking
@@ -79,8 +81,8 @@ def main():
         worker.start()
     
     # Put the tasks into the queue as a tuple:
-    for found_tr in found_trs:
-        logging.info('Queueing {}'.format(tr.find('td',{'class':'titleColumn'}).text))
+    for found_tr in found_trs[0:1]:
+        logging.info('Queueing {}'.format(found_tr.find('td',{'class':'titleColumn'}).text))
         queue.put(found_tr)
     
     queue.join()
