@@ -21,10 +21,10 @@ class UserAPITest(TestCase):
         Ensure that the model creating list
         """
         
-        user                = mommy.make(CustomUser)
+        user                        = mommy.make(CustomUser)
         self.assertTrue(isinstance(user, CustomUser))
 
-        user_serializer     = UserListSearialzer(user)
+        user_serializer             = UserListSearialzer(user)
 
         assert user.id              == user_serializer.data.get('id')
         assert user.first_name      == user_serializer.data.get('first_name')

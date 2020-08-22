@@ -19,6 +19,12 @@ from .models import CustomUser
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
+
+    """
+    Serializer to get thedata and 
+    create user
+    """
+
     password = serializers.CharField(write_only=True)
 
     def validate(self, data, *args, **kwargs):
@@ -40,6 +46,10 @@ class UserCreateSerializer(serializers.ModelSerializer):
         fields = ('email', 'username', 'password', 'first_name', 'last_name')
 
 class UserListSearialzer(serializers.ModelSerializer):
+
+    """
+    Listing the uSer int serialized format
+    """
 
     class Meta:
         model = CustomUser
