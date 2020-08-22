@@ -14,6 +14,7 @@ django-filter==2.3.0
 django-timezone-field==4.0
 djangorestframework==3.11.1
 djangorestframework-jwt==1.11.0
+psycopg2
 drf-yasg==1.17.1
 idna==2.10
 importlib-metadata==1.7.0
