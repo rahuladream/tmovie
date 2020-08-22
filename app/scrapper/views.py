@@ -17,6 +17,10 @@ from rest_framework.response import Response
 # Local Model import
 from app.movie.models import Movie
 
+from celery.task.schedules import crontab
+from celery.decorators import periodic_task
+from celery import task
+from tmovie.settings import celery_app
 
 # Basic logging to get more detailed information
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -121,7 +125,7 @@ class MovieScrapper(Thread):
             finally:
                 self.queue.task_done()
 
-
+@task(name='sync_from_imdb')
 def main():
     ts = time()
 
@@ -148,13 +152,16 @@ def main():
     queue.join()
     logging.info('Took %s', time() - ts)
 
+@celery_app.task
+def add(a, b):
+    return a + b
 
 class SyncData(APIView):
 
     def get(self, req, *args, **kwargs):
         try:
-            main()
+            add.delay(1 ,4)
             return Response('We have queue the request, It will take hardly 2 min to update', status=status.HTTP_200_OK)
         except Exception as e:
+            print(e)
             return Response('We could not process the request', status=status.HTTP_400_BAD_REQUEST)
-    
