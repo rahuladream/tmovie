@@ -27,8 +27,8 @@ __author__ = 'Rahul'
 
 class ListMovieAPI(GenericAPIView):
     serializer_class = MovieSerializer
-    # permission_classes = (IsAuthenticated,)
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = (IsAuthenticated,)
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
     def get(self, request):
@@ -46,6 +46,29 @@ class ListMovieAPI(GenericAPIView):
         except Exception as e:
             return Response({'status': False, 'message': str(e)},
                             status=status.HTTP_400_BAD_REQUEST)
+
+
+class SingleMovieAPI(GenericAPIView):
+    serializer_class = MovieSerializer
+    # permission_classes = (IsAuthenticated,)
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get(self, request, pk, format=None):
+        
+        try:
+            movie_obj      = Movie.objects.get(pk=pk)
+            serializer     = MovieSerializer(movie_obj)
+            
+            return Response({
+                    'status': True,
+                    'data': serializer.data
+                }, status=status.HTTP_200_OK) 
+        except Movie.DoesNotExist:
+            return Response({'status': False, 'message': 'Query not found'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+
+
 
 
 class WatchMarkAPI(APIView):
