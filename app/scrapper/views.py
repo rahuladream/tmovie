@@ -26,7 +26,6 @@ from rest_framework.permissions import IsAdminUser
 from tmovie import celery_app
 
 
-
 # Basic logging to get more detailed information
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -39,7 +38,6 @@ class MovieScrapper(Thread):
     def __init__(self, queue):
         Thread.__init__(self)
         self.queue = queue
-    
 
     def run(self):
         while True:
@@ -57,7 +55,7 @@ class MovieScrapper(Thread):
                 # Fetching detail page info
                 # Basically transferring the route to individual page 
                 # and getting more information from there
-                
+
                 detail_page_url         = IMDB_HOST + movie_link
                 response_page           = requests.get(detail_page_url)
                 fetch_detail_page_info  = BeautifulSoup(response_page.text, 'lxml')
@@ -78,7 +76,7 @@ class MovieScrapper(Thread):
                     except:
                         # We leave the detail that were missing in the page
                         continue
-                
+
                 # basically here we create or add the data into the database
                 try:
                     Movie.objects.get(movieId = movie_uniqueid)
@@ -134,6 +132,7 @@ class MovieScrapper(Thread):
             finally:
                 self.queue.task_done()
 
+
 @celery_app.task(name='sync_from_imdb')
 def main(url):
 
@@ -152,12 +151,12 @@ def main(url):
         # even though the wokers are blocking
         worker.daemon = True
         worker.start()
-    
+
     # Put the tasks into the queue as a tuple:
     for found_tr in found_trs:
         logging.info('Queueing {}'.format(found_tr.find('td',{'class':'titleColumn'}).text))
         queue.put(found_tr)
-    
+
     queue.join()
     logging.info('Took %s', time() - ts)
 
@@ -175,11 +174,10 @@ class SyncData(APIView):
 
             if url is None:
                 return Response('IMDB Url is missing', status=status.HTTP_400_BAD_REQUEST)
-            
 
             if not 'www.imdb.com' == url.split('/')[2]:
                 return Response('Url must be IMDB URL -> https://www.imdb.com/<sample_url>', status=status.HTTP_400_BAD_REQUEST)
-            
+
             main.delay(url)
             return Response('We are scrapping IMDB. We will notify once done.', status=status.HTTP_200_OK)
         except Exception as e:

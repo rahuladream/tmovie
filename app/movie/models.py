@@ -1,13 +1,11 @@
 # Python Core Imports
-import os
-import json
 import datetime
 
 # Django Imports
-from django.utils import timezone
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from app.authentication.models import CustomUser 
+
+from app.authentication.models import CustomUser
 
 YEAR_CHOICES = []
 for r in range(1700, (datetime.datetime.now().year + 1)):
@@ -41,13 +39,13 @@ class Movie(models.Model):
     class Meta:
         verbose_name = _('movie')
         verbose_name_plural = _('movies')
-    
+
     def get_avg_rating(self):
         """
         Convert float rating into readable format
         """
         return self.rating
-    
+
     def __str__(self):
         return f'{self.title}'
 
@@ -73,14 +71,13 @@ class Watch(models.Model):
         verbose_name        = _("watch/watched list")
         verbose_name_plural = _("watch/watched lists")
         unique_together     = (('user', 'movie'))
-    
-    def __str__(self):
-        return '{} "added" <{}> to {}'.format(self.user.username.title(), self.movie.title, self.action) 
 
+    def __str__(self):
+        return '{} "added" <{}> to {}'.format(self.user.username.title(), self.movie.title, self.action)
 
     def get_watch_list(self, cls, user):
         return cls.object.filter(user=user, action='watch_list')
-    
+
     def get_watched_list(self, user):
         return self.object.filter(user=user, action='watched_list')
 

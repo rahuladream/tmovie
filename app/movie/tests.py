@@ -1,28 +1,21 @@
 # python core impprt
-import os
-import json
 
-# django core import 
+# django core import
 from django.test import TestCase
-from django.urls import reverse
-from rest_framework.authtoken.models import Token
 from model_mommy import mommy
-
 # DRF import
-from rest_framework_jwt.serializers import JSONWebTokenSerializer
 from rest_framework import status
-from rest_framework.test import APITestCase
 from rest_framework.test import APIClient
-
+from rest_framework.test import APITestCase
 
 # Local imports
 from .models import CustomUser
 from .serializers import *
 
 
-
 class MovieTest(TestCase):
     pass
+
 
 class MovieAPITest(APITestCase):
 
@@ -39,12 +32,12 @@ class MovieAPITest(APITestCase):
         data = {'status': True, 'data': []}
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, data)
-    
+
     def test_create_movie(self):
         """
         Ensure that the movie is created
         """
-        movie_data =  {
+        movie_data = {
             "title": "Gol Maal",
             "movieId": "tt0079221",
             "release_date": 1979,
@@ -65,27 +58,26 @@ class MovieAPITest(APITestCase):
             "gross": "No Gross Record Found",
             "cumulative": "No Cumulative Record Found"
         }
-        movie_serializer            = MovieSerializer(data=movie_data)
+        movie_serializer = MovieSerializer(data=movie_data)
 
         if movie_serializer.is_valid():
             pass
-            
+
         else:
             message = ''
             for error in movie_serializer.errors.values():
                 message += " "
                 message += error[0]
             print(message)
-        
+
         movie = Movie(**movie_data)
 
-        assert movie_data.get('title')             ==  movie_serializer.data.get('title')
+        assert movie_data.get('title') == movie_serializer.data.get('title')
 
-    
     def test_watch_mark_api(self):
         user = mommy.make(CustomUser)
-        
-        movie_data =  {
+
+        movie_data = {
             "id": 1,
             "title": "Gol Maal",
             "movieId": "tt0079221",
@@ -117,8 +109,3 @@ class MovieAPITest(APITestCase):
         if watch_serializer.is_valid():
             watch = watch_serializer.create(watch_serializer.data, user)
             pass
-        
-
-
-        
-

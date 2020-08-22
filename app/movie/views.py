@@ -1,23 +1,15 @@
 # python imports
-import requests
-import os
-import datetime
-from collections import OrderedDict 
 
 
+from rest_framework import permissions
 # Django core imports
 from rest_framework import status
-from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
-from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_jwt.serializers import JSONWebTokenSerializer
-from rest_framework_jwt.views import JSONWebTokenAPIView
-from rest_framework import permissions
-
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 # Local imports
-from .models import *
 from .serializers import *
 
 # API Logic Here
@@ -30,19 +22,18 @@ class ListMovieAPI(GenericAPIView):
     permission_classes = (IsAuthenticated,)
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-
     def get(self, request):
         """
         List out all the movies
         """
         try:
-            movie_obj        = Movie.objects.all()
+            movie_obj = Movie.objects.all()
             movie_serializer = MovieSerializer(movie_obj, many=True)
             movies = movie_serializer.data
             return Response({
                 'status': True,
                 'data': movies
-            }, status=status.HTTP_200_OK) 
+            }, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'status': False, 'message': str(e)},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -50,25 +41,27 @@ class ListMovieAPI(GenericAPIView):
 
 class SingleMovieAPI(GenericAPIView):
     serializer_class = MovieSerializer
+
     # permission_classes = (IsAuthenticated,)
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get(self, request, pk, format=None):
-        
+
+        """
+        Individual Movie fetch
+        """
+
         try:
-            movie_obj      = Movie.objects.get(pk=pk)
-            serializer     = MovieSerializer(movie_obj)
-            
+            movie_obj = Movie.objects.get(pk=pk)
+            serializer = MovieSerializer(movie_obj)
+
             return Response({
-                    'status': True,
-                    'data': serializer.data
-                }, status=status.HTTP_200_OK) 
+                'status': True,
+                'data': serializer.data
+            }, status=status.HTTP_200_OK)
         except Movie.DoesNotExist:
             return Response({'status': False, 'message': 'Query not found'},
                             status=status.HTTP_400_BAD_REQUEST)
-
-
-
 
 
 class WatchMarkAPI(APIView):
@@ -80,8 +73,8 @@ class WatchMarkAPI(APIView):
         Mark a movie as watched or add it to watch list
         """
         try:
-            data                = request.data
-            serializer          = WatchMarkSerializer(data=data)
+            data = request.data
+            serializer = WatchMarkSerializer(data=data)
 
             if serializer.is_valid():
                 watch = serializer.create(serializer.data, request.user)
@@ -103,18 +96,17 @@ class WatchMarkAPI(APIView):
                 'status': False,
                 'message': str(e)
             }, status=status.HTTP_400_BAD_REQUEST)
-        
-    
+
     def put(self, request, format=None):
         """
-        Update already marke user
+        Update already mark user
         """
         try:
-            data            = request.data
-            movie_obj       = Movie.objects.get(id=request.data.get('movie'))
-            action          = request.data.get('action')
+            data = request.data
+            movie_obj = Movie.objects.get(id=request.data.get('movie'))
+            action = request.data.get('action')
             is_update = Watch.objects.filter(user=request.user, movie=movie_obj).update(action=action)
-            
+
             if is_update:
                 return Response({
                     'status': True,
@@ -126,28 +118,27 @@ class WatchMarkAPI(APIView):
                     'message': 'We are unable to update the request.'
                 }, status=status.HTTP_400_BAD_REQUEST)
 
-            
+
         except Exception as e:
             return Response({
                 'status': False,
                 'message': str(e)
             }, status=status.HTTP_400_BAD_REQUEST)
-    
 
     def delete(self, request, format=None):
         """
         Delete the watch/watched list data
         """
         try:
-            data            = request.data
-            movie_obj       = Movie.objects.get(id=request.data.get('movie'))
-            watch_obj       = Watch.objects.get(user=request.user, movie=movie_obj)
+            data = request.data
+            movie_obj = Movie.objects.get(id=request.data.get('movie'))
+            watch_obj = Watch.objects.get(user=request.user, movie=movie_obj)
             watch_obj.delete()
 
             return Response({
-                    'status': True,
-                    'message': 'Movie deleted from watch/watche list.'
-                }, status=status.HTTP_200_OK)
+                'status': True,
+                'message': 'Movie deleted from watch/watched list.'
+            }, status=status.HTTP_200_OK)
         except Watch.DoesNotExist:
             return Response({
                 'status': False,
@@ -155,22 +146,19 @@ class WatchMarkAPI(APIView):
             }, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-
-
 class WatchListAPI(APIView):
     serializer_class = WatchListSerializer
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, format=None):
         try:
-            watch_obj        = Watch.objects.filter(user=request.user, action="watch_list")
+            watch_obj = Watch.objects.filter(user=request.user, action="watch_list")
             watch_serializer = WatchListSerializer(watch_obj, many=True)
             movies = watch_serializer.data
             return Response({
                 'status': True,
                 'data': movies
-            }, status=status.HTTP_200_OK) 
+            }, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'status': False, 'message': str(e)},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -179,17 +167,17 @@ class WatchListAPI(APIView):
 class WatchedListAPI(APIView):
     serializer_class = WatchedListSerializer
 
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, format=None):
         try:
-            watch_obj        = Watch.objects.filter(user=request.user, action="watched_list")
+            watch_obj = Watch.objects.filter(user=request.user, action="watched_list")
             watch_serializer = WatchListSerializer(watch_obj, many=True)
             movies = watch_serializer.data
             return Response({
                 'status': True,
                 'data': movies
-            }, status=status.HTTP_200_OK) 
+            }, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'status': False, 'message': str(e)},
                             status=status.HTTP_400_BAD_REQUEST)
