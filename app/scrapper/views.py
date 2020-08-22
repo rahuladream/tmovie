@@ -16,12 +16,16 @@ from rest_framework.response import Response
 
 # Local Model import
 from app.movie.models import Movie
+from .constant import IMDB_HOST
 
+# Celery import
 from celery.task.schedules import crontab
 from celery.decorators import periodic_task
 from celery import task
 from rest_framework.permissions import IsAdminUser
 from tmovie import celery_app
+
+
 
 # Basic logging to get more detailed information
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -54,14 +58,14 @@ class MovieScrapper(Thread):
                 # Basically transferring the route to individual page 
                 # and getting more information from there
                 
-                detail_page_url         = 'https://www.imdb.com' + movie_link
+                detail_page_url         = IMDB_HOST + movie_link
                 response_page           = requests.get(detail_page_url)
                 fetch_detail_page_info  = BeautifulSoup(response_page.text, 'lxml')
                 movie_story_line        = fetch_detail_page_info.find('div', {'class': 'inline canwrap'}).text.split('\n')[2].strip()
                 more_info_block         = fetch_detail_page_info.findAll('div', {'class': 'txt-block'})
                 movie_votes             = fetch_detail_page_info.find('div', {'class': 'imdbRating'}).strong['title']
                 star_crew               = fetch_detail_page_info.findAll('div', {'class': 'credit_summary_item'})[2].text.split('\n')[2]
-                movie_trailer           = 'https://www.imdb.com/' + fetch_detail_page_info.find('div', {'class': 'slate'})('a')[0]['href']
+                movie_trailer           = IMDB_HOST + fetch_detail_page_info.find('div', {'class': 'slate'})('a')[0]['href']
 
                 # Decide to store the random information into dictionary
                 # fetch the information as required
@@ -131,10 +135,10 @@ class MovieScrapper(Thread):
                 self.queue.task_done()
 
 @celery_app.task(name='sync_from_imdb')
-def main():
+def main(url=None):
+
     ts = time()
 
-    url = 'https://www.imdb.com/india/top-rated-indian-movies'
     response_back = requests.get(url)
     scrap_html = BeautifulSoup(response_back.text, 'lxml')
     list_found_tbody = scrap_html.find('tbody', {'class': 'lister-list'})
@@ -162,8 +166,11 @@ class SyncData(APIView):
 
     permission_classes = (IsAdminUser,)
 
-    def get(self, req, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         try:
+
+
+
             main.delay()
             return Response('We are scrapping IMDB. We will notify once done.', status=status.HTTP_200_OK)
         except Exception as e:
