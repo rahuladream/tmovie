@@ -14,50 +14,37 @@ from rest_framework_jwt.views import JSONWebTokenAPIView
 
 # Local imports
 from .models import *
-
+from .serializers import *
 
 # API Logic Here
 
-class TestAppView(APIView):
 
-    def get(self, request, format=None):
+class ListMovieAPI(GenericAPIView):
+    serializer_class = MovieSerializer
+    # permission_classes = (IsAuthenticated,)
 
+    def get(self, request):
+        """
+        List out all the movies
+        """
         try:
-            sum = lambda x, y: x + y
-            result = sum(11, 51)
-            
+            movie_obj        = Movie.objects.all()
+            movie_serializer = MovieSerializer(movie_obj, many=True)
+            movies = movie_serializer.data
             return Response({
                 'status': True,
-                'Response': 'On adding {} result is : {}'.format('11 + 51', result) },
-                status = status.HTTP_200_OK
-            )
+                'data': movies
+            }, status=status.HTTP_200_OK) 
         except Exception as e:
-            return Response({
-                'status': False,
-                'message': str(e)},
-                status = status.HTTP_400_BAD_REQUEST
-            )
-
-
-# class ProjectAPIView(GenericAPIView):
-#     serializer_class = ProjectSerializer
-#     permission_classes = (IsAuthenticated,)
-
-#     def get(self, request):
-#         """
-#         List out all the movies
-#         """
-#         try:
-#             pass
-#         except Exception as e:
-#             pass
+            return Response({'status': False, 'message': str(e)},
+                            status=status.HTTP_400_BAD_REQUEST)
     
-#     def post(self, request, format=None):
-#         """
-#         Create a movie database
-#         """
-#         try:
-#             pass
-#         except Exception as e:
-#             pass
+    def post(self, request, format=None):
+        """
+        Create a movie database
+        """
+        try:
+            pass
+        except Exception as e:
+            pass
         

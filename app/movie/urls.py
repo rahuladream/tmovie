@@ -14,7 +14,7 @@ from rest_framework import permissions
 from .constants import *
 
 from .views import (
-                TestAppView
+                ListMovieAPI
                 )
 
 
@@ -23,7 +23,7 @@ from .views import (
 app_name = 'movie'
 
 urlpatterns = [
-    url(r'^test/$', TestAppView.as_view(), name='test_app_api'),
+    url(r'', ListMovieAPI.as_view(), name='movie-get-all-api'),
 
    
 
