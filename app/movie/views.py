@@ -22,6 +22,8 @@ from .serializers import *
 
 # API Logic Here
 
+__author__ = 'Rahul'
+
 
 class ListMovieAPI(GenericAPIView):
     serializer_class = MovieSerializer

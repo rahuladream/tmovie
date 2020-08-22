@@ -20,11 +20,16 @@ from app.movie.models import Movie
 from celery.task.schedules import crontab
 from celery.decorators import periodic_task
 from celery import task
+from rest_framework.permissions import IsAdminUser
 from tmovie import celery_app
 
 # Basic logging to get more detailed information
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+
+
+__author__ = 'Rahul'
+
 
 class MovieScrapper(Thread):
     def __init__(self, queue):
@@ -155,10 +160,11 @@ def main():
 
 class SyncData(APIView):
 
+    permission_classes = (IsAdminUser,)
+
     def get(self, req, *args, **kwargs):
         try:
             main.delay()
-            return Response('We have queue the request, It will take hardly 2 min to update', status=status.HTTP_200_OK)
+            return Response('We are scrapping IMDB. We will notify once done.', status=status.HTTP_200_OK)
         except Exception as e:
-            print(e)
             return Response('We could not process the request', status=status.HTTP_400_BAD_REQUEST)

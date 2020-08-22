@@ -42,13 +42,13 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^api/v1/tmovie/', include('app.movie.urls', namespace='movie_api')),
-    url(r'^api/v1/tmovie/user/', include('app.authentication.urls', namespace='user_api')),
-    url(r'^api/v1/tmovie/', include('app.scrapper.urls', namespace='scrapper_api')),
+    url(r'^api/v1/movie/', include('app.movie.urls', namespace='movie_api')),
+    url(r'^api/v1/movie/user/', include('app.authentication.urls', namespace='user_api')),
+    url(r'^api/v1/movie/', include('app.scrapper.urls', namespace='scrapper_api')),
 
 
 
     url(r'^docs(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='docs-json'),
-    url(r'^docs/$', schema_view.with_ui('swagger', cache_timeout=0), name='docs-ui'),
+    url(r'^$', schema_view.with_ui('swagger', cache_timeout=0), name='docs-ui'),
     url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]

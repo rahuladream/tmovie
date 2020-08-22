@@ -21,6 +21,7 @@ from .utils import generate_jwt_token
 from .serializers import *
 
 
+__author__ = 'Rahul'
 
 
 class RegistrationAPIView(APIView):
