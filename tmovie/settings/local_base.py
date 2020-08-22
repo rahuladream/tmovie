@@ -1,5 +1,4 @@
 from .base import *  # noqa
-import dj_database_url
 
 
 DEBUG = True
@@ -8,16 +7,16 @@ HOST = "http://localhost:8000"
 
 SECRET_KEY = config('SECRET_KEY')
 
-# DATABASES = {
-#     "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": base_dir_join("db.sqlite3"),}
-# }
-
-DEBUG = config('DEBUG', default=False, cast=bool)
 DATABASES = {
-    'default': dj_database_url.config(
-        default=config('DATABASE_URL')
-    )
+    "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": base_dir_join("db.sqlite3"),}
 }
+
+# DEBUG = config('DEBUG', default=False, cast=bool)
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=config('DATABASE_URL')
+#     )
+# }
 
 STATIC_ROOT = base_dir_join("staticfiles")
 STATIC_URL = "/static/"
