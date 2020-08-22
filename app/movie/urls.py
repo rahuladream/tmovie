@@ -14,7 +14,8 @@ from rest_framework import permissions
 from .constants import *
 
 from .views import (
-                ListMovieAPI
+                ListMovieAPI,
+                WatchMarkAPI
                 )
 
 
@@ -23,8 +24,8 @@ from .views import (
 app_name = 'movie'
 
 urlpatterns = [
-    url(r'', ListMovieAPI.as_view(), name='movie-get-all-api'),
-
+    url(r'^mark/$', WatchMarkAPI.as_view(), name='watch-mark-api'),
+    url(r'^list/$', ListMovieAPI.as_view(), name='movie-get-all-api')
    
 
 ]
