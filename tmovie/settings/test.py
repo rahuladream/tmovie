@@ -1,5 +1,8 @@
 from .base import *  # noqa
 
+DEBUG = config('DEBUG_MODE')
+
+SECRET_KEY = config('SECRET_KEY')
 
 SECRET_KEY = "test"
 

@@ -1,7 +1,7 @@
 from .base import *  # noqa
 
 
-DEBUG = config('DEBUG_MODE')
+DEBUG = True
 
 HOST = "http://localhost:8000"
 
