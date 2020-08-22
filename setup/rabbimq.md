@@ -36,3 +36,10 @@ $ systemctl start rabbitmq-server
 ```
 $ systemctl status rabbitmq-server​
 ```
+
+
+
+# Celery beat server start
+```
+celery -A tmovie worker -l info -B
+```

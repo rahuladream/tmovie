@@ -22,8 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'drf_yasg',
-    'django_celery_beat',
-    'celery',
+    'django_celery_results',
     'app.movie',
     'app.scrapper',
     'app.authentication'
@@ -39,7 +38,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CELERY_BROKER_URL = 'amqp://localhost'
+CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672/'
 
 # Celery
 CELERY_ACCEPT_CONTENT = ["json"]
@@ -47,6 +46,22 @@ CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_ACKS_LATE = True
 CELERY_TIMEZONE = 'UTC'
+
+
+CELERY_RESULT_BACKEND = 'django-db'
+
+CELERY_CACHE_BACKEND = 'django-cache'
+
+CELERY_CACHE_BACKEND = 'default'
+
+# django setting.
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'my_cache_table',
+    }
+}
+
 
 ROOT_URLCONF = 'tmovie.urls'
 
