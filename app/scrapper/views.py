@@ -135,7 +135,7 @@ class MovieScrapper(Thread):
                 self.queue.task_done()
 
 @celery_app.task(name='sync_from_imdb')
-def main(url=None):
+def main(url):
 
     ts = time()
 
@@ -166,12 +166,22 @@ class SyncData(APIView):
 
     permission_classes = (IsAdminUser,)
 
-    def get(self, request, *args, **kwargs):
+    def post(self, request, format=None):
+        """
+        Scrapping the data and storing into database
+        """
         try:
+            url = request.data.get('imdb_url')
 
+            if url is None:
+                return Response('IMDB Url is missing', status=status.HTTP_400_BAD_REQUEST)
+            
 
-
-            main.delay()
+            if not 'www.imdb.com' == url.split('/')[2]:
+                return Response('Url must be IMDB URL -> https://www.imdb.com/<sample_url>', status=status.HTTP_400_BAD_REQUEST)
+            
+            main.delay(url)
             return Response('We are scrapping IMDB. We will notify once done.', status=status.HTTP_200_OK)
         except Exception as e:
+            print(e)
             return Response('We could not process the request', status=status.HTTP_400_BAD_REQUEST)
