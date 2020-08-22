@@ -32,7 +32,7 @@ $ systemctl enable rabbitmq-server
 $ systemctl start rabbitmq-server
 ```
 
-#Check rabbitmq server status
+# Check rabbitmq server status
 ```
 $ systemctl status rabbitmq-server​
 ```

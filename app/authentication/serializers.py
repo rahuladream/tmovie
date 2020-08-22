@@ -29,7 +29,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
         username = validated_data['username']
         first_name = validated_data['first_name']
         last_name = validated_data['last_name']
-        role = validated_data['role']
         email = validated_data['email']
         user = CustomUser.objects.create(**validated_data)
         user.set_password(validated_data['password'])
@@ -38,4 +37,10 @@ class UserCreateSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = CustomUser
-        fields = ('email', 'id', 'username', 'password', 'first_name', 'last_name', 'role')
+        fields = ('email', 'username', 'password', 'first_name', 'last_name')
+
+class UserListSearialzer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CustomUser
+        fields = ('id', 'username', 'first_name', 'last_name', 'email')

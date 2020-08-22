@@ -10,14 +10,9 @@ from django.utils.translation import ugettext_lazy as _
 # Local imports here
 
 
-USER_ROLE = (('ADMIN', 'ADMIN'),
-        ('USER', 'USER')
-        )
-
 class CustomUser(AbstractUser):
     first_name = models.CharField(('First Name'), max_length=30, blank=True)
     last_name = models.CharField(('Last Name'), max_length=30, blank=True)
-    role = models.CharField(max_length=20, choices=USER_ROLE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
