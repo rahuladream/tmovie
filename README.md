@@ -2,6 +2,9 @@
 
 ## Project Moto
 
+[![Build Status](https://travis-ci.org/{ORG-or-USERNAME}/{REPO-NAME}.png?branch=master)](https://travis-ci.org/{ORG-or-USERNAME}/{REPO-NAME})
+
+
 For a movie rating app, create a django rest api using ```django rest framework```. The app needs to have the capability to 
 list movies, 
 logged in users can save movies to a watchlist or mark them watched.  
