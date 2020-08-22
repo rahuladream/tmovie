@@ -17,6 +17,10 @@ from .serializers import UserCreateSerializer, UserListSearialzer
 class UserAPITest(TestCase):
 
     def test_list_user(self):
+        """
+        Ensure that the model creating list
+        """
+        
         user                = mommy.make(CustomUser)
         self.assertTrue(isinstance(user, CustomUser))
 
@@ -30,6 +34,10 @@ class UserAPITest(TestCase):
     
 
     def test_register(self):
+        """
+        Ensure that user able to register
+        """
+
         request_data = {
             'username': 'username',
             'first_name': 'first_name',

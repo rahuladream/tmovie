@@ -24,6 +24,13 @@ class MovieSerializer(serializers.ModelSerializer):
         exclude = ('movie_dump',)
         # fields = '__all__'
 
+class MovieCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Movie
+    
+    def create(self, validated_data):
+        return Movie.objects.create(**validated_data)
 
 class WatchMarkSerializer(serializers.ModelSerializer):
     
