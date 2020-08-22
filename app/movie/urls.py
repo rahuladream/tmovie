@@ -15,7 +15,9 @@ from .constants import *
 
 from .views import (
                 ListMovieAPI,
-                WatchMarkAPI
+                WatchMarkAPI,
+                WatchListAPI,
+                WatchedListAPI
                 )
 
 
@@ -25,7 +27,9 @@ app_name = 'movie'
 
 urlpatterns = [
     url(r'^mark/$', WatchMarkAPI.as_view(), name='watch-mark-api'),
-    url(r'^list/$', ListMovieAPI.as_view(), name='movie-get-all-api')
+    url(r'^list/$', ListMovieAPI.as_view(), name='movie-get-all-api'),
+    url(r'^watch_list/$', WatchListAPI.as_view(), name='movie-get-all-watch-list'),
+    url(r'^watched_list/$', WatchedListAPI.as_view(), name='movie-get-all-watched-list')
    
 
 ]

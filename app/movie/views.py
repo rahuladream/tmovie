@@ -107,4 +107,64 @@ class WatchMarkAPI(APIView):
                 'status': False,
                 'message': str(e)
             }, status=status.HTTP_400_BAD_REQUEST)
+    
 
+    def delete(self, request, format=None):
+        """
+        Delete the watch/watched list data
+        """
+        try:
+            data            = request.data
+            movie_obj       = Movie.objects.get(id=request.data.get('movie'))
+            watch_obj       = Watch.objects.get(user=request.user, movie=movie_obj)
+            watch_obj.delete()
+
+            return Response({
+                    'status': True,
+                    'message': 'Movie deleted from watch/watche list.'
+                }, status=status.HTTP_200_OK)
+        except Watch.DoesNotExist:
+            return Response({
+                'status': False,
+                'message': 'Requested movie does not exist in watch list.'
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
+class WatchListAPI(APIView):
+    serializer_class = WatchListSerializer
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request, format=None):
+        try:
+            watch_obj        = Watch.objects.filter(user=request.user, action="watch_list")
+            watch_serializer = WatchListSerializer(watch_obj, many=True)
+            movies = watch_serializer.data
+            return Response({
+                'status': True,
+                'data': movies
+            }, status=status.HTTP_200_OK) 
+        except Exception as e:
+            return Response({'status': False, 'message': str(e)},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+
+class WatchedListAPI(APIView):
+    serializer_class = WatchedListSerializer
+
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request, format=None):
+        try:
+            watch_obj        = Watch.objects.filter(user=request.user, action="watched_list")
+            watch_serializer = WatchListSerializer(watch_obj, many=True)
+            movies = watch_serializer.data
+            return Response({
+                'status': True,
+                'data': movies
+            }, status=status.HTTP_200_OK) 
+        except Exception as e:
+            return Response({'status': False, 'message': str(e)},
+                            status=status.HTTP_400_BAD_REQUEST)
