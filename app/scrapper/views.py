@@ -152,9 +152,6 @@ def main():
     queue.join()
     logging.info('Took %s', time() - ts)
 
-@celery_app.task
-def add(a, b):
-    return a + b
 
 class SyncData(APIView):
 
