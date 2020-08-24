@@ -6,8 +6,7 @@
 
 Coverage build
 
-.. image:: https://cdn.rawgit.com/dbrgn/coverage-badge/master/example.svg
-    :alt: coverage badge
+[! Coverage status](https://cdn.rawgit.com/dbrgn/coverage-badge/master/example.svg)]
 
 For a movie rating app, create a django rest api using ```django rest framework```. The app needs to have the capability to 
 list movies, 
