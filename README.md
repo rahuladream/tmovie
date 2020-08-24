@@ -4,9 +4,6 @@
 
 [![Build Status](https://travis-ci.org/{ORG-or-USERNAME}/{REPO-NAME}.png?branch=master)](https://travis-ci.org/{ORG-or-USERNAME}/{REPO-NAME})
 
-Coverage build
-
-[![Coverage status](https://cdn.rawgit.com/dbrgn/coverage-badge/master/example.svg)]
 
 For a movie rating app, create a django rest api using ```django rest framework```. The app needs to have the capability to 
 list movies, 
