@@ -19,8 +19,10 @@ __author__ = 'Rahul'
 
 class ListMovieAPI(GenericAPIView):
     serializer_class = MovieSerializer
+    pagination_class   = StandardPagination
     permission_classes = (IsAuthenticated,)
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    
 
     def get(self, request):
         """
@@ -42,8 +44,8 @@ class ListMovieAPI(GenericAPIView):
 class SingleMovieAPI(GenericAPIView):
     serializer_class = MovieSerializer
 
-    # permission_classes = (IsAuthenticated,)
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = (IsAuthenticated,)
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get(self, request, pk, format=None):
 

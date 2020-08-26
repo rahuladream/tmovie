@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 
 # Rest Framework imports.
 from rest_framework import serializers
+from rest_framework.pagination import PageNumberPagination
 
 # Third Party Library imports
 from .models import Movie, Watch
@@ -12,6 +13,12 @@ from .models import Movie, Watch
 
 # Python imports.
 # Django imports.
+
+class StandardPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_page = 'page'
+    max_page_size = 100
+
 
 class MovieSerializer(serializers.ModelSerializer):
     class Meta:
