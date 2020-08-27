@@ -36,6 +36,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+    # Custom middlerware in addition
+
+    'app.scrapper.middleware.StackOverflowMiddleware'
 ]
 
 CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672/'
