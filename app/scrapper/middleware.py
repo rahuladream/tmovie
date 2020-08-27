@@ -5,12 +5,13 @@ import requests
 from django.conf import settings
 
 # Async middleware
-
+from django.utils.decorators import sync_and_async_middleware
 
 """
 Handling the error direct app
 """
 
+@sync_and_async_middleware
 class StackOverflowMiddleware:
     
     def __init__(self, get_response):
@@ -28,10 +29,14 @@ class StackOverflowMiddleware:
         
         if settings.DEBUG:
             
-            intitle = u'{}: {}'.format(exception.__class__.__name__,  exception.message)
+            # import pdb; pdb.set_trace()
+
+            intitle = u'{}'.format(exception.__class__.__name__)
+            
+            print(intitle)
 
             url = 'https://api.stackexchange.com/2.2/search'
-            headers = { 'User-Agent': 'github.com/vitorfs/seot' }
+            # headers = { 'User-Agent': 'github.com/vitorfs/seot' }
             params = {
                 'order': 'desc',
                 'sort': 'votes',
@@ -41,7 +46,7 @@ class StackOverflowMiddleware:
                 'intitle': intitle
             }
 
-            r = requests.get(url, params=params, headers=headers)
+            r = requests.get(url, params=params)
             questions = r.json()
 
             for question in questions['items']:

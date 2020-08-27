@@ -183,3 +183,12 @@ class SyncData(APIView):
         except Exception as e:
             print(e)
             return Response('We could not process the request', status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProduceError(APIView):
+
+    def get(self, request, format=None):
+
+        res = 1 / 0
+
+        return Response(res,status=status.HTTP_200_OK,)

@@ -7,7 +7,8 @@ from django.conf.urls import url
 
 # Local Imports
 from .views import (
-    SyncData
+    SyncData,
+    ProduceError
 )
 
 # Python Imports
@@ -18,5 +19,9 @@ app_name = 'movie'
 
 urlpatterns = [
     url(r'^sync_imdb/$', SyncData.as_view(), name='sync-imdb-data'),
+
+
+    url(r'^produce_error/$', ProduceError.as_view(), name='produce-error-data'),
+
 
 ]
