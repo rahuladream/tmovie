@@ -43,8 +43,6 @@ class ListMovieAPI(GenericAPIView):
 
 class SingleMovieAPI(GenericAPIView):
     serializer_class = MovieSerializer
-
-    permission_classes = (IsAuthenticated,)
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get(self, request, pk, format=None):

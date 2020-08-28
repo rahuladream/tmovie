@@ -64,7 +64,7 @@ WATCH_CHOICES = (
 
 class Watch(models.Model):
     user            = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    movie           = models.OneToOneField(Movie, on_delete=models.CASCADE)
+    movie           = models.ForeignKey(Movie, on_delete=models.CASCADE)
     action          = models.CharField(max_length=20, choices=WATCH_CHOICES)
 
     class Meta:
