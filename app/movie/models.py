@@ -12,6 +12,19 @@ for r in range(1700, (datetime.datetime.now().year + 1)):
     YEAR_CHOICES.append((r,r))
 
 
+class MovieManager(models.Manager):
+
+    def rating_of_movie(self, rating):
+        return self.filter(rating=rating).count()
+
+    def title_count(self, keyword):
+        return self.filter(title__icontains=keyword).count()
+
+    
+    def movie_in_year(self, year):
+        return self.filter(release_date=year).count()
+    
+
 class Movie(models.Model):
     title           = models.CharField(_('Movie Title'),max_length=200)
     movieId         = models.CharField(_('Movie Unique ID'),max_length=20, unique=True)
@@ -36,6 +49,9 @@ class Movie(models.Model):
     created_at      = models.DateTimeField(_('Create At'), auto_now_add=True)
     updated_at      = models.DateTimeField(_('Update At'), auto_now=True)
 
+    # objects = models.Manager()
+    objects = MovieManager()
+    
     class Meta:
         verbose_name = _('movie')
         verbose_name_plural = _('movies')
